@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="Reg.css">
+</head>
+<body>
+    <div class="wrapper">
+        <form id="register-link">
+            <h1>Registration</h1>
+            <div class="input-box">
+                FirstName <input type="text" id="firstname" name="firstname" required>
+            </div>
+            <div class="input-box">
+                LastName <input type="text" id="lastname" name="lastname" required>
+            </div>
+            <div class="input-box">
+                EmailId <input type="email" id="emailid" name="emailid" required>
+            </div>
+            <div class="input-box password-container">
+                Password
+                <input type="password" id="password" name="password" required>
+                <span id="togglePassword" class="show-btn">Show</span>
+            </div>
+            <div class="input-box password-container">
+                Confirm Password
+                <input type="password" id="confirmpassword" name="confirmpassword" required>
+                <span id="toggleConfirmPassword" class="show-btn">Show</span>
+            </div>
+            <div class="input-box">
+                MobileNumber <input type="text" id="mobilenumber" name="mobilenumber" required>
+            </div>
+            <button type="submit" class="btn">SUBMIT</button>
+        </form>
+
+        <script>
+            // Toggle visibility for password field
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', function () {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                this.textContent = type === 'password' ? 'Show' : 'Hide';
+            });
+
+            // Toggle visibility for confirm password field
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordField = document.getElementById('confirmpassword');
+            
+            toggleConfirmPassword.addEventListener('click', function () {
+                const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordField.setAttribute('type', type);
+                this.textContent = type === 'password' ? 'Show' : 'Hide';
+            });
+            document.getElementById('register-link').onsubmit = function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(event.target);
+                
+                const user = {
+                    firstname: formData.get('firstname'),
+                    lastname: formData.get('lastname'),
+                    emailid: formData.get('emailid'),
+                    password: formData.get('password'),
+                    confirmpassword: formData.get('confirmpassword'),
+                    mobilenumber: formData.get('mobilenumber')
+                };
+
+                // Validate First Name and Last Name 
+                const nameRegex = /^[A-Za-z]+$/;
+                if (!nameRegex.test(user.firstname)) {
+                    alert("Firstname must contain only alphabetical letters.");
+                    return;
+                }
+                if (!nameRegex.test(user.lastname)) {
+                    alert("Lastname must contain only alphabetical letters.");
+                    return;
+                }
+
+                // Validate Email 
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com)$/;
+                if (!emailRegex.test(user.emailid) || /yahoo/.test(user.emailid)) {
+                    alert("Please enter a valid .com email and avoid Yahoo or .in domains.");
+                    return;
+                }
+
+                // Validate Password
+                if (user.password.length !== 5) {
+                    alert("Password must be exactly 5 characters.");
+                    return;
+                }
+
+                // Check if passwords match
+                if (user.password !== user.confirmpassword) {
+                    alert("Passwords do not match. Please make sure both password and confirm password are the same.");
+                    return;
+                }
+
+                // Validate Mobile Number
+                const mobileRegex = /^[0-9]{10}$/;
+                if (!mobileRegex.test(user.mobilenumber)) {
+                    alert('Please enter a valid 10-digit mobile number.');
+                    return;
+                }
+
+                // If all validations pass
+                alert("Successfully registered");
+                window.location.href = 'Login.html';
+            };
+        </script>
+    </div>
+</body>
+</html>
